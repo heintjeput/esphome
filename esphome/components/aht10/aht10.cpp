@@ -30,6 +30,12 @@ static const uint8_t AHT10_ATTEMPTS = 3;         // safety margin, normally 3 at
 void AHT10Component::setup() {
   ESP_LOGCONFIG(TAG, "Setting up AHT10...");
 
+  // Mark as not failed before initializing. Some devices will turn off sensors to save on batteries
+  // and when they come back on, the COMPONENT_STATE_FAILED bit must be unset on the component.
+  if ((this->component_state_ & COMPONENT_STATE_MASK) == COMPONENT_STATE_FAILED) {
+    this->component_state_ &= ~COMPONENT_STATE_MASK;
+    this->component_state_ |= COMPONENT_STATE_CONSTRUCTION;
+  }
   if (!this->write_bytes(0, AHT10_CALIBRATE_CMD, sizeof(AHT10_CALIBRATE_CMD))) {
     ESP_LOGE(TAG, "Communication with AHT10 failed! Not calibrated");
     this->mark_failed();
@@ -136,9 +142,15 @@ float AHT10Component::get_setup_priority() const { return setup_priority::DATA; 
 void AHT10Component::dump_config() {
   ESP_LOGCONFIG(TAG, "AHT10:");
   LOG_I2C_DEVICE(this);
-  if (this->is_failed()) {
+  //if (this->is_failed()) {
   //  ESP_LOGE(TAG, this);
-    ESP_LOGE(TAG, "Communication with AHT10 failed! At dump config");
+  //  ESP_LOGE(TAG, "Communication with AHT10 failed! At dump config");
+  //}
+  // Mark as not failed before initializing. Some devices will turn off sensors to save on batteries
+  // and when they come back on, the COMPONENT_STATE_FAILED bit must be unset on the component.
+  if ((this->component_state_ & COMPONENT_STATE_MASK) == COMPONENT_STATE_FAILED) {
+    this->component_state_ &= ~COMPONENT_STATE_MASK;
+    this->component_state_ |= COMPONENT_STATE_CONSTRUCTION;
   }
   LOG_UPDATE_INTERVAL(this);
   LOG_SENSOR("  ", "Temperature", this->temperature_sensor_);
