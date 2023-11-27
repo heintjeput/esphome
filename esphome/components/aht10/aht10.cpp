@@ -31,24 +31,24 @@ void AHT10Component::setup() {
   ESP_LOGCONFIG(TAG, "Setting up AHT10...");
 
   if (!this->write_bytes(0, AHT10_CALIBRATE_CMD, sizeof(AHT10_CALIBRATE_CMD))) {
-    ESP_LOGE(TAG, "Communication with AHT10 failed!");
+    ESP_LOGE(TAG, "Communication with AHT10 failed! Not calibrated");
     this->mark_failed();
     return;
   }
   uint8_t data = 0;
   if (this->write(&data, 1) != i2c::ERROR_OK) {
-    ESP_LOGD(TAG, "Communication with AHT10 failed!");
+    ESP_LOGD(TAG, "Communication with AHT10 failed! Could not read data");
     this->mark_failed();
     return;
   }
   delay(AHT10_DEFAULT_DELAY);
   if (this->read(&data, 1) != i2c::ERROR_OK) {
-    ESP_LOGD(TAG, "Communication with AHT10 failed!");
+    ESP_LOGD(TAG, "Communication with AHT10 failed! Could not set delai");
     this->mark_failed();
     return;
   }
   if (this->read(&data, 1) != i2c::ERROR_OK) {
-    ESP_LOGD(TAG, "Communication with AHT10 failed!");
+    ESP_LOGD(TAG, "Communication with AHT10 failed! Could not read data");
     this->mark_failed();
     return;
   }
@@ -63,7 +63,7 @@ void AHT10Component::setup() {
 
 void AHT10Component::update() {
   if (!this->write_bytes(0, AHT10_MEASURE_CMD, sizeof(AHT10_MEASURE_CMD))) {
-    ESP_LOGE(TAG, "Communication with AHT10 failed!");
+    ESP_LOGE(TAG, "Communication with AHT10 failed! Could not measure");
     this->status_set_warning();
     return;
   }
