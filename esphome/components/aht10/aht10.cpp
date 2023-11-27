@@ -137,7 +137,7 @@ void AHT10Component::dump_config() {
   ESP_LOGCONFIG(TAG, "AHT10:");
   LOG_I2C_DEVICE(this);
   if (this->is_failed()) {
-    ESP_LOGE(TAG, this);
+  //  ESP_LOGE(TAG, this);
     ESP_LOGE(TAG, "Communication with AHT10 failed! At dump config");
   }
   LOG_UPDATE_INTERVAL(this);
