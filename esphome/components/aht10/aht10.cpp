@@ -136,9 +136,9 @@ float AHT10Component::get_setup_priority() const { return setup_priority::DATA; 
 void AHT10Component::dump_config() {
   ESP_LOGCONFIG(TAG, "AHT10:");
   LOG_I2C_DEVICE(this);
-  if (this->is_failed()) {
-    ESP_LOGE(TAG, "Communication with AHT10 failed! At dump config");
-  }
+  //if (this->is_failed()) {
+  //  ESP_LOGE(TAG, "Communication with AHT10 failed! At dump config");
+  //}
   LOG_SENSOR("  ", "Temperature", this->temperature_sensor_);
   LOG_SENSOR("  ", "Humidity", this->humidity_sensor_);
 }
