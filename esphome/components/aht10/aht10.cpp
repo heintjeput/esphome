@@ -43,7 +43,7 @@ void AHT10Component::setup() {
   }
   delay(AHT10_DEFAULT_DELAY);
   if (this->read(&data, 1) != i2c::ERROR_OK) {
-    ESP_LOGD(TAG, "Communication with AHT10 failed! Could not set delai");
+    ESP_LOGD(TAG, "Communication with AHT10 failed! Could not set delay");
     this->mark_failed();
     return;
   }
@@ -90,7 +90,7 @@ void AHT10Component::update() {
       } else {
         ESP_LOGD(TAG, "ATH10 Unrealistic humidity (0x0), retrying...");
         if (!this->write_bytes(0, AHT10_MEASURE_CMD, sizeof(AHT10_MEASURE_CMD))) {
-          ESP_LOGE(TAG, "Communication with AHT10 failed!");
+          ESP_LOGE(TAG, "Communication with AHT10 failed! Incorrect measure size");
           this->status_set_warning();
           return;
         }
@@ -137,7 +137,7 @@ void AHT10Component::dump_config() {
   ESP_LOGCONFIG(TAG, "AHT10:");
   LOG_I2C_DEVICE(this);
   if (this->is_failed()) {
-    ESP_LOGE(TAG, "Communication with AHT10 failed!");
+    ESP_LOGE(TAG, "Communication with AHT10 failed! At dump config");
   }
   LOG_SENSOR("  ", "Temperature", this->temperature_sensor_);
   LOG_SENSOR("  ", "Humidity", this->humidity_sensor_);
