@@ -140,6 +140,7 @@ void AHT10Component::dump_config() {
     ESP_LOGE(TAG, this);
     ESP_LOGE(TAG, "Communication with AHT10 failed! At dump config");
   }
+  LOG_UPDATE_INTERVAL(this);
   LOG_SENSOR("  ", "Temperature", this->temperature_sensor_);
   LOG_SENSOR("  ", "Humidity", this->humidity_sensor_);
 }
